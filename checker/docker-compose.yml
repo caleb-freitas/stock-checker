@@ -1,0 +1,26 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  checker:
+    container_name: checker
+    build: .
+    entrypoint: wait-for postgres:5432 -- sh -c "npm run start:dev"
+    restart: always
+    volumes:
+      - .:/home/node/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres
+
+volumes:
+  postgres:
