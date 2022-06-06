@@ -13,7 +13,7 @@ services:
   checker:
     container_name: checker
     build: .
-    entrypoint: wait-for postgres:5432 -- sh -c "npm run start:dev"
+    entrypoint: wait-for postgres:5432 -- sh -c "npm install && npx prisma migrate dev && npm run start:dev"
     restart: always
     volumes:
       - .:/home/node/app
