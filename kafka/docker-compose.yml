@@ -13,8 +13,11 @@ services:
       - zookeeper
     ports:
       - 9092:9092
+      - 9094:9094
     env_file:
       - .env
+    extra_hosts:
+      - host.docker.internal:172.17.0.1
 
   control-center:
     container_name: control_center

@@ -1,15 +1,5 @@
 version: "3.9"
 services:
-  postgres:
-    container_name: postgres
-    image: postgres:latest
-    ports:
-      - 5432:5432
-    volumes:
-      - postgres:/var/lib/postgresql/data
-    env_file:
-      - .env
-
   checker:
     container_name: checker
     build: .
@@ -21,6 +11,27 @@ services:
       - 3000:3000
     depends_on:
       - postgres
+    extra_hosts:
+      - host.docker.internal:172.17.0.1
+    networks:
+      - checker-network
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - checker-network
+
+networks:
+  checker-network:
+    driver: bridge
 
 volumes:
   postgres:
