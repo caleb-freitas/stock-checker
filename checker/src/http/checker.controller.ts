@@ -1,8 +1,8 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { CheckerService } from '../services/checker.service';
-import { CreateCheckOrderDto } from '../services/dto/create.check.order.dto';
+import { CreateCheckOrderDto } from '../database/dto/create.check.order.dto';
 
-@Controller('check-order')
+@Controller('check')
 export class CheckerController {
   constructor(private checkerService: CheckerService) {}
 
