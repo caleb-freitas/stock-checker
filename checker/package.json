@@ -17,10 +17,14 @@
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",
+    "@nestjs/config": "^2.1.0",
     "@nestjs/core": "^8.0.0",
+    "@nestjs/microservices": "^8.4.6",
     "@nestjs/platform-express": "^8.0.0",
     "@nestjs/schedule": "^2.0.1",
     "@prisma/client": "^3.14.0",
+    "axios": "^0.27.2",
+    "kafkajs": "^2.0.2",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0"
