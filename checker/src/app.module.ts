@@ -1,12 +1,17 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
-import { CheckerController } from './controllers/checker.controller';
 import { DatabaseModule } from './database/database.module';
-import { CheckerService } from './services/checker.service';
+import { MessagingModule } from './messaging/messaging.module';
+import { HttpModule } from './http/http.module';
 
 @Module({
-  imports: [DatabaseModule, ScheduleModule.forRoot()],
-  controllers: [CheckerController],
-  providers: [CheckerService],
+  imports: [
+    HttpModule,
+    DatabaseModule,
+    MessagingModule,
+    ScheduleModule.forRoot(),
+  ],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}
