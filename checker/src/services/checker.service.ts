@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
-import { PrismaService } from '../database/prisma/prisma.service';
-import { CreateCheckOrderDto } from './dto/create.check.order.dto';
+import axios from 'axios';
+import { PrismaService } from '../database/prisma.service';
+import { CreateCheckOrderDto } from '../database/dto/create.check.order.dto';
 
 @Injectable()
 export class CheckerService {
@@ -17,6 +18,17 @@ export class CheckerService {
 
   @Interval(20000)
   async check() {
-    console.log('running cronjob');
+    const config = {
+      headers: {
+        'X-Finnhub-Token': 'caf5qc2ad3ibf4h8sb9g',
+      },
+    };
+    const response = await axios.get(
+      `https://finnhub.io/api/v1/quote?symbol=AAPL`,
+      config,
+    );
+    if (response.data.c <= 147) {
+      console.log('send message to mailer service');
+    }
   }
 }
