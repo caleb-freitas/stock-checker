@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  mailer:
+    container_name: mailer
+    build: .
+    entrypoint: sh -c "npm install && npm run start:dev"
+    restart: always
+    volumes:
+      - .:/home/node/app
+    ports:
+      - 8002:3000
+    extra_hosts:
+      - host.docker.internal:172.17.0.1
+    networks:
+      - mailer-network
+
+networks:
+  mailer-network:
+    driver: bridge
