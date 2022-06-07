@@ -1,7 +1,9 @@
 import { Module } from '@nestjs/common';
-import { CheckerController } from './controllers/checker.controller';
+import { MailService } from '../services/mail.service';
+import { MailController } from './controllers/mail.controller';
 
 @Module({
-  controllers: [CheckerController],
+  controllers: [MailController],
+  providers: [MailService],
 })
 export class MessagingModule {}
