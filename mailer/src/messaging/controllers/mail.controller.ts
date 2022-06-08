@@ -5,6 +5,7 @@ import { MailService } from '../../services/mail.service';
 export type TargetPriceReachedPayload = {
   clientEmail: string;
   stockPrice: number;
+  stockSymbol: string;
 };
 
 @Controller()
@@ -16,8 +17,9 @@ export class MailController {
     @Payload('value')
     payload: TargetPriceReachedPayload,
   ) {
-    console.log(`[${new Date()}] before mail service`);
     await this.mailerService.send(payload);
-    console.log(`[${new Date()}] after mail service`);
+    console.log(
+      `[Mailer] Message consumed from checker.target-price-reached topic`,
+    );
   }
 }
