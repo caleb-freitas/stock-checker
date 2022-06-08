@@ -20,31 +20,32 @@ export class CheckerService {
     });
   }
 
-  @Interval(20000)
+  @Interval(60000)
   async check() {
-    const checkOrder = await this.prisma.checkOrder.findUnique({
-      where: {
-        id: '9968eb40-cfaa-4184-81a3-e3f16efef580',
-      },
-    });
-
-    const { stock, email } = checkOrder;
-
-    const config = {
-      headers: {
-        'X-Finnhub-Token': 'caf5qc2ad3ibf4h8sb9g',
-      },
-    };
-    const response = await axios.get(
-      `https://finnhub.io/api/v1/quote?symbol=${stock}`,
-      config,
-    );
-    if (response.data.c <= 147) {
-      this.kafka.emit('checker.target-price-reached', {
-        clientEmail: email,
-        stockPrice: response.data.c,
-      });
-      console.log('send message to mailer service');
+    const checkOrders = await this.prisma.checkOrder.findMany();
+    for (const checkOrder of checkOrders) {
+      const { email, targetPrice, stock, id, status } = checkOrder;
+      if (status === 'Checked') {
+        return null;
+      }
+      const response = await axios.get(
+        `https://finnhub.io/api/v1/quote?symbol=${stock}&token=caf5qc2ad3ibf4h8sb9g`,
+      );
+      const stockPrice = response.data.c;
+      if (stockPrice <= targetPrice) {
+        this.kafka.emit('checker.target-price-reached', {
+          clientEmail: email,
+          stockPrice: response.data.c,
+          stockSymbol: stock,
+        });
+        console.log(
+          `[Checker] Message registered on checker.target-price-reached topic`,
+        );
+        await this.prisma.checkOrder.update({
+          where: { id },
+          data: { status: 'Checked' },
+        });
+      }
     }
   }
 }
