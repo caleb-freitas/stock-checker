@@ -8,9 +8,16 @@ datasource db {
 }
 
 model CheckOrder {
-  id          String   @id @default(uuid())
+  id          String           @id @default(uuid())
   email       String
   stock       String
   targetPrice Float
-  createdAt   DateTime @default(now())
+  status      CheckOrderStatus @default(Checking)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @default(now()) @updatedAt
+}
+
+enum CheckOrderStatus {
+  Checking
+  Checked
 }
