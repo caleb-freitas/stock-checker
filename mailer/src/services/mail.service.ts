@@ -7,11 +7,11 @@ export class MailService {
   constructor(private mailerService: MailerService) {}
 
   async send(payload: TargetPriceReachedPayload) {
-    const { clientEmail, stockPrice } = payload;
+    const { clientEmail, stockPrice, stockSymbol } = payload;
     await this.mailerService.sendMail({
       to: clientEmail,
-      subject: 'StockChecker Ltda.',
-      text: `Stock reached $ ${stockPrice}`,
+      subject: `StockChecker | ${stockSymbol}`,
+      text: `Hi! The ${stockSymbol} stock reached $ ${stockPrice}.`,
     });
   }
 }
